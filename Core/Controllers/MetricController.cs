@@ -6,14 +6,11 @@ using Core.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Core.Data;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Core.Controllers
 {
     [Route("api/[controller]")]
     public class MetricController : Controller
     {
-
         private IMetricRepository _MetricRepo;
         public MetricController(IMetricRepository repo){
             _MetricRepo = repo;
@@ -31,7 +28,6 @@ namespace Core.Controllers
             return "All sort of types, yo";
         }
 
-
         [HttpPost]
         public IActionResult Post([FromBody]Metric item)
         {
@@ -44,7 +40,5 @@ namespace Core.Controllers
                 return BadRequest(ModelState);
             }
         }
-
-
     }
 }

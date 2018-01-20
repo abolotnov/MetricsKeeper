@@ -8,18 +8,14 @@ using Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Core.Repository;
 using Core.Data;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using OpenIddict;
-using AspNet.Security.OpenIdConnect.Primitives;
 using Core.Test;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Core
 {
     public class Startup
     {
-        
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -35,9 +31,9 @@ namespace Core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
             services.AddMvc()
-                    .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                    .AddJsonOptions(options => 
+                                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<CoreContext>(options => options.UseMySql(Configuration["Data:MySQLDBConnectionString"]));
             services.AddScoped<IOrgRepository, OrgRepository>();
             services.AddScoped<IPortfolioRepository, PortfolioRepository>();
@@ -45,61 +41,42 @@ namespace Core
             services.AddScoped<IMetricRepository, MetricRepository>();
             services.AddSingleton<IConfiguration>(Configuration);
 
-
-            #region Identity Setup
-            services.AddDbContext<CoreAuthContext>(options =>
+            #region Swagger Configuration
+            services.AddSwaggerGen(options =>
             {
-                options.UseMySql(Configuration["Data:MySQLDBConnectionString"]);
-                options.UseOpenIddict();
-            });
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<CoreAuthContext>()
-            .AddDefaultTokenProviders();
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 2;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-
-                // Lockout settings
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                options.Lockout.MaxFailedAccessAttempts = 100;
-
-				//options.User.RequireUniqueEmail = true;
-				options.ClaimsIdentity.UserNameClaimType = OpenIdConnectConstants.Claims.Name;
-				options.ClaimsIdentity.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
-				options.ClaimsIdentity.RoleClaimType = OpenIdConnectConstants.Claims.Role;
-            });
-            services.AddOpenIddict(options=>{
-                options.AddEntityFrameworkCoreStores<CoreAuthContext>();
-                options.AddMvcBinders();
-                //options.EnableTokenEndpoint("/api/authtoken");
-                options.EnableTokenEndpoint("/connect/token");
-                options.AllowPasswordFlow();
-                options.DisableHttpsRequirement();
-				
+                options.DescribeAllEnumsAsStrings();
+                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                {
+                    Title = "Metrics Keeper Core API",
+                    Version = "1.0",
+                    TermsOfService = "Development purposes only, your data is not retained"
+                });
             });
             #endregion
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseOAuthValidation();
-            app.UseOpenIddict();
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
             app.UseMiddleware<Core.Tools.ErrorHandlingMiddleware>();
             app.UseMvc();
-			//app.UseMvcWithDefaultRoute();
-			if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "TestWithDBWipe"){
-				DataInitializer initer = new DataInitializer(app.ApplicationServices);
-				initer.DeleteAllData();
-				initer.CreateOrgStructure();
-			}
+
+            #region Swagger COnfiguration
+            app.UseSwagger().UseSwaggerUI(c=>{
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger yo!");
+            });
+#endregion
+
+            //app.UseMvcWithDefaultRoute();
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "TestWithDBWipe")
+            {
+                DataInitializer initer = new DataInitializer(app.ApplicationServices);
+                initer.DeleteAllData();
+                initer.CreateOrgStructure();
+            }
         }
     }
 }

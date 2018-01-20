@@ -4,14 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 
 namespace Core.Data
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser // : IdentityUser
     {
         public bool IsSystemAdmin { get; set; } = false;
     }

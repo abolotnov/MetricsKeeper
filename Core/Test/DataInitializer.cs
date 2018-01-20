@@ -6,8 +6,6 @@ using Core.Data;
 using Core.Tools;
 using System.IO;
 using Newtonsoft.Json.Linq;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace Core.Test
@@ -15,14 +13,14 @@ namespace Core.Test
     public class DataInitializer
     {
         CoreContext _cont;
-        CoreAuthContext _authCont;
+        //CoreAuthContext _authCont;
         InfluxDBClient _influxClient;
         ConfigurationReader conf;
 
         public DataInitializer(IServiceProvider serviceProvider){
             conf = new ConfigurationReader();
             _cont = (CoreContext)serviceProvider.GetService(typeof(CoreContext));
-            _authCont = (CoreAuthContext)serviceProvider.GetService(typeof(CoreAuthContext));
+            //_authCont = (CoreAuthContext)serviceProvider.GetService(typeof(CoreAuthContext));
 			_influxClient = new InfluxDBClient(conf.Configuration["Data:InfluxDBHost"],
 										 conf.Configuration["Data:InfluxDBLogin"],
 										 conf.Configuration["Data:InfluxDBPassword"]);
@@ -49,11 +47,12 @@ namespace Core.Test
                 _cont.SaveChanges();
                 _influxClient.CreateDatabaseAsync(o.MetricDatabaseName);
                 foreach(JToken UserDataToken in OrgToken["Users"]){
-                    CreateOrgUser(o.Id, UserDataToken.ToObject<OrgUserRegistrationData>());
+                    //CreateOrgUser(o.Id, UserDataToken.ToObject<OrgUserRegistrationData>());
                 }
             }
         }
 
+        /*
         public void CreateOrgUser(int OrgId, OrgUserRegistrationData regdata){
 			ApplicationUser user = new ApplicationUser
 			{
@@ -81,5 +80,7 @@ namespace Core.Test
 			_cont.OrgAccess.Add(NewOrgAccessor);
 			_cont.SaveChanges();
 		}
+
+*/
     }
 }
