@@ -2,6 +2,22 @@
   "Orgs": [
     {
       "Name": "StrongSoft",
+      "Users": [
+        {
+          "email": "StrongSoftAdmin@clevereer.com",
+          "password": "password",
+          "IsOrgAdmin": true,
+          "AllowWrite": true
+        },
+        {
+          "email": "StrongSoftReadOnly@clevereer.com",
+          "password": "password",
+        },
+        {
+          "email": "StrongSoftReadWrite@clevereer.com",
+          "password": "password",
+        }
+      ],
       "Portfolios": [
         {
           "Name": "Financial",
@@ -22,7 +38,7 @@
         {
           "Name": "Lab",
           "Projects": [
-            { "Name": "!@#$%^&*()_++++++++++" },
+            { "Name": "!@#$%^&*()_+++++++++w+" },
             { "Name": "Какое-то странное имя, это капец" },
             { "Name": "" }
           ]
@@ -31,6 +47,18 @@
     },
     {
       "Name": "Clevereer",
+      "Users": [
+        {
+          "email": "ClevereerAdmin@clevereer.com",
+          "password": "password",
+          "IsOrgAdmin": true
+        },
+        {
+          "email": "ClevereerReadOnly@clevereer.com",
+          "password": "password",
+          "IsOrgAdmin": false
+        }
+      ],
       "Portfolios": [
         {
           "Name": "Prospects",

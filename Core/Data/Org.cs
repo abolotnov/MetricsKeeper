@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Core.Data
 {
     public class Org : BaseEntity, IEntityBase
@@ -12,4 +14,16 @@ namespace Core.Data
             }
         }
     }
+
+	public class OrgAccess : BaseEntity, IEntityBase
+	{
+		public int OrganizationId { get; set; }
+		[ForeignKey("OrganizationId")]
+		public Org Organization { get; set; }
+		
+        public string ApplicationUserId { get; set; }
+        public bool AllowRead { get; set; }
+		public bool AllowWrite { get; set; }
+		public bool AllowAdministration { get; set; }
+	}
 }

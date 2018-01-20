@@ -6,4 +6,5 @@ namespace Core.Repository
     public interface IPortfolioRepository : IEntityBaseRepository<Portfolio>{}
     public interface IProjectRepository : IEntityBaseRepository<Project>{}
     public interface IMetricRepository : IEntityBaseRepository<Metric>{}
+    public interface IOrgAccessRepository : IEntityBaseRepository<OrgAccess>{}
 }
