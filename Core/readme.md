@@ -12,34 +12,12 @@ https://chsakell.com/2016/06/23/rest-apis-using-asp-net-core-and-entity-framewor
 
 This should get you running.
 
-# API facade:
+# API facade: please use Swagger (/swagger) to see what's available
 
  General pattern is very simple:
 
   - use Content-Type: application/json
   - use content in raw json in body of request
 
- HTTP {GET, POST, PUT, DELETE} /api/{entity}:
-
- GET /api/org - will list all orgs
- GET /api/org/1 - will give details on org with id=1
- PUT /api/org - will update the org based on its id (in body)
- POST /api/org - will create a new org
- delete /api/org/1 - will delete the org with id=1
-
-# API available:
-
- - /api/org
- - /api/portfolio
- - /api/project
- - /api/metric
-
-# API specific extensions:
-
- - TBD GET /api/entity/?expand=true - will expand the entity to include its lazy-loaded children
- - TBD GET /api/entity/?withdeleted=true - will return all data, including deleted/not active
- - TBD GET /api/entity?page=n - will return a page
-
- # Todo:
-
- - Add Serilog
+ # Thoughts and ideas
+ We can use superset (https://github.com/apache/incubator-superset) or grafana to build UI for metrics visualization

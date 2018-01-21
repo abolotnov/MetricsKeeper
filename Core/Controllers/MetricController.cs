@@ -24,9 +24,10 @@ namespace Core.Controllers
 
         [Route("types")]
         [HttpGet]
-        public string GetTypes(){
-            return "All sort of types, yo";
+        public List<DataPointType> GetTypes(){
+            return DataPointType.GetAllTypes();
         }
+
 
         [HttpPost]
         public IActionResult Post([FromBody]Metric item)
@@ -40,5 +41,7 @@ namespace Core.Controllers
                 return BadRequest(ModelState);
             }
         }
+
+
     }
 }

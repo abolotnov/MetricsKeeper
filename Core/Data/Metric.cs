@@ -2,6 +2,7 @@
 using static Core.Data.MetricModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Core.Data
@@ -12,6 +13,7 @@ namespace Core.Data
         public ModelType Type { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public List<IDataPointListable> DataPoints {get;set;}
 
         public int ProjectId { get; set; }
         [ForeignKey("ProjectId")]
